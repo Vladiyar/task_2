@@ -62,18 +62,33 @@ class Human {
 
    eyeColorInheritance(motherEyeColor, fatherEyeColor) {
       let inheritedColor = randomNumberGenerator(10)
-      console.log(inheritedColor)
-      if (inheritedColor <= 3) {
-         console.log('mother')
+      console.log(inheritedColor);
+      if (motherEyeColor === fatherEyeColor) {
+         console.log('seme as both');
+         return motherEyeColor;
+      }
+      else if (inheritedColor <= 3) {
+         console.log('mother');
          return motherEyeColor;
       }
       else if (inheritedColor > 6) {
-         console.log('father')
+         console.log('father');
          return fatherEyeColor;
       }
       //TODO: create inherited of two colors
+      // 'blue', 'brown', 'green', 'gray'
       else if (inheritedColor > 3 && inheritedColor < 6) {
-         console.log('between')
+         console.log('between');
+         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+         if (motherEyeColor === 'green' && fatherEyeColor === 'gray') {return 'green'}
+         if (motherEyeColor === 'brown' && fatherEyeColor === 'green') {return 'brown'}
+         if (motherEyeColor === 'green' && fatherEyeColor === 'brown') {return 'brown'}
+         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+         if (motherEyeColor === 'gray' && fatherEyeColor === 'blue') {return 'gray'}
+         if (motherEyeColor === 'blue' && fatherEyeColor === 'gray') {return 'gray'}
+         if (motherEyeColor === 'brown' && fatherEyeColor === 'blue') {return 'green'}
+         if (motherEyeColor === 'blue' && fatherEyeColor === 'brown') {return 'green'}
          return 'potato';
       }
    }
