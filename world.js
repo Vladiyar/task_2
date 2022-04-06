@@ -4,7 +4,8 @@
 //    return age >= 18;
 // }
 
-// lifeCycle = setInterval(console.log('potato'), 1000);
+const colorMutations = [['green', 'gray'], ['blue', 'gray'],  ['blue', 'gray'], ['blue', 'brown']];
+
 
 function randomNumberGenerator(maxNumber) {
    return Math.floor(Math.random() * (maxNumber));
@@ -26,27 +27,82 @@ function getRandomEyeColor() {
 }
 
 function getNewHuman(motherEyeColor, fatherEyeColor) {
-   const human = new Human();
-   const eyeColor = human.eyeColorInheritance(motherEyeColor, fatherEyeColor);
-   const genders = [new Man(eyeColor), new Woman(eyeColor)];
-   return genders[randomNumberGenerator(2)]
+   const eyeColor = Human.eyeColorInheritance(motherEyeColor, fatherEyeColor);
+   const genders = [Man, Woman];
+   return new genders[randomNumberGenerator(2)](eyeColor);
 }
 
 class World {
-   time = 0;
+   static time = 0;
    people = [];
+
+   lifeCycle = setInterval(() => this.timePasses(), 1000);
+
+   timePasses () {
+      let adultIndividuals = [];
+
+      World.time++;
+      for (let man of this.people ) {
+         man.age++
+         if (Human.isAdult(man)) {
+            adultIndividuals.push(man);
+         }
+      }
+
+
+      if(adultIndividuals.length >= 2) {
+         while(adultIndividuals.length > 1) {
+            this.populate(adultIndividuals.shift(), adultIndividuals.shift())
+         }
+      }
+
+      this.death()
+      if (World.time % 10 === 0) {
+         console.log(this.people)
+         this.getData()
+      }
+   }
 
    constructor(...args) {
       this.people.push(...args);
    }
 
+   death () {
+      for(let man of this.people) {
+         if(man.age > 60) {
+            this.people.pop(man);
+         }
+      }
+   }
 
    populate (individual1, individual2) {
-      return individual1.gender === individual2.gender ? null : this.people.push(getNewHuman(individual1.eyeColor, individual2.eyeColor));
+      return individual1.gender !== individual2.gender ? this.people.push(getNewHuman(individual1.eyeColor, individual2.eyeColor)) : null;
    }
 
    getData () {
-      return this.time;
+      let males = 0,
+          females = 0,
+          middleAge = 0;
+      let result = [];
+
+      for(let man of this.people) {
+         if(man.gender === 'male') {
+            males++
+         }
+         if(man.gender === 'female') {
+            females++
+         }
+         middleAge += man.age;
+      }
+
+      result.push(males);
+      result.push(females);
+      result.push(middleAge / this.people.length);
+
+      console.log(World.time);
+      console.log(result);
+
+
       //TODO: amount of males and females, their eye colors, middle age
    }
 
@@ -54,43 +110,43 @@ class World {
 
 class Human {
    gender;
-   eyeColor;
+   static eyeColor;
    age;
    name;
    // weight;
    // height;
 
-   eyeColorInheritance(motherEyeColor, fatherEyeColor) {
+   static isAdult (man) {
+      return man.age >= 18;
+   }
+
+   static eyeColorInheritance(motherEyeColor, fatherEyeColor) {
       let inheritedColor = randomNumberGenerator(10)
-      console.log(inheritedColor);
       if (motherEyeColor === fatherEyeColor) {
-         console.log('seme as both');
          return motherEyeColor;
       }
-      else if (inheritedColor <= 3) {
-         console.log('mother');
+      if (inheritedColor <= 3) {
          return motherEyeColor;
       }
-      else if (inheritedColor > 6) {
-         console.log('father');
+      if (inheritedColor > 6) {
          return fatherEyeColor;
       }
       //TODO: create inherited of two colors
       // 'blue', 'brown', 'green', 'gray'
-      else if (inheritedColor > 3 && inheritedColor < 6) {
-         console.log('between');
-         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
-         if (motherEyeColor === 'green' && fatherEyeColor === 'gray') {return 'green'}
-         if (motherEyeColor === 'brown' && fatherEyeColor === 'green') {return 'brown'}
-         if (motherEyeColor === 'green' && fatherEyeColor === 'brown') {return 'brown'}
-         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
-         if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
-         if (motherEyeColor === 'gray' && fatherEyeColor === 'blue') {return 'gray'}
-         if (motherEyeColor === 'blue' && fatherEyeColor === 'gray') {return 'gray'}
-         if (motherEyeColor === 'brown' && fatherEyeColor === 'blue') {return 'green'}
-         if (motherEyeColor === 'blue' && fatherEyeColor === 'brown') {return 'green'}
-         return 'potato';
-      }
+
+      if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+      if (motherEyeColor === 'green' && fatherEyeColor === 'gray') {return 'green'}
+      if (motherEyeColor === 'brown' && fatherEyeColor === 'green') {return 'brown'}
+      if (motherEyeColor === 'green' && fatherEyeColor === 'brown') {return 'brown'}
+      if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+      if (motherEyeColor === 'gray' && fatherEyeColor === 'green') {return 'green'}
+      if (motherEyeColor === 'gray' && fatherEyeColor === 'blue') {return 'gray'}
+      if (motherEyeColor === 'blue' && fatherEyeColor === 'gray') {return 'gray'}
+      if (motherEyeColor === 'brown' && fatherEyeColor === 'blue') {return 'green'}
+      if (motherEyeColor === 'blue' && fatherEyeColor === 'brown') {return 'green'}
+
+      // console.log('potato')
+      // colorMutations.filter((colorMutation) => colorMutation.colors.includes(motherEyeColor) && colorMutation.colors.includes(fatherEyeColor));
    }
 }
 
@@ -121,5 +177,3 @@ class Woman extends Human {
 
 
 const w = new World(new Woman, new Man())
-w.populate(w.people[0], w.people[1])
-console.log(w)
