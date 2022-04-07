@@ -5,4 +5,7 @@ const Human = require("./Human");
 
 const {randomNumberGenerator, getRandomFemaleName, getRandomMaleName, getRandomEyeColor, getNewHuman, colorMutations} = require("./helpers");
 
-const w = new World(new Woman, new Man())
+setInterval(() => {console.log(w.getData())
+}, 1000)
+
+
