@@ -1,8 +1,8 @@
 const Human = require("./Human");
-const {randomNumberGenerator, getRandomFemaleName, getRandomMaleName, getRandomEyeColor, colorMutations} = require("./helpers");
+const {getNewHuman} = require("./helpers");
 
 
-module.exports = class World {
+class World {
    static time = 0;
    people = [];
 
@@ -31,10 +31,6 @@ module.exports = class World {
 
       this.death()
 
-      if (World.time % 10 === 0) {
-         console.log(this.people)
-         this.getData()
-      }
    }
 
 
@@ -51,30 +47,28 @@ module.exports = class World {
    }
 
    getData () {
-      let males = 0,
-          females = 0,
-          middleAge = 0;
-      let result = [];
+      const result = {
+         males: 0,
+         females: 0,
+         middleAge: 0
+      }
+
 
       for(let man of this.people) {
          if(man.gender === 'male') {
-            males++
+            result.males++
          }
          if(man.gender === 'female') {
-            females++
+            result.females++
          }
-         middleAge += man.age;
+         result.middleAge += man.age;
       }
-
-      result.push(males);
-      result.push(females);
-      result.push(middleAge / this.people.length);
-
-      console.log(World.time);
-      console.log(result);
+          result.middleAge = result.middleAge / this.people.length;
+      return result;
    }
 }
 
+module.exports = World;
 
 
 
